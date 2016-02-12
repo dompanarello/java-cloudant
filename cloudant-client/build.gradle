@@ -2,13 +2,39 @@
 //the maven pom name entry and User-Agent name in client.properties are defined by clientName
 ext.clientName = 'java-cloudant'
 
+// Additional configurations for javadoc
+configurations {
+    linkableJavadoc {
+        transitive false
+    }
+}
 
 dependencies {
     compile project(':cloudant-http')
+    linkableJavadoc project(':cloudant-http')
     compile group: 'commons-codec', name: 'commons-codec', version: '1.6'
     //test dependencies
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'com.squareup.okhttp', name: 'mockwebserver', version: '2.5.0'
+}
+
+javadoc {
+    options.overview = "overview.html"
+    include("**/lightcouch/*Exception.java",
+            "**/client/api/**")
+}
+
+
+gradle.projectsEvaluated {
+    javadoc {
+        // Add the offline link options for the client API pointing to javadoc.io using the resolved
+        // java-cloudant version. Use the package-list from the javadoc zip file.
+        configurations.linkableJavadoc.each {
+            String moduleName = configurations.linkableJavadoc.resolvedConfiguration.firstLevelModuleDependencies.first().moduleName;
+            String moduleVers = configurations.linkableJavadoc.resolvedConfiguration.firstLevelModuleDependencies.first().moduleVersion;
+            options.linksOffline('http://static.javadoc.io/com.cloudant/' + moduleName + '/' + moduleVers,'../' + moduleName + '/build/docs/javadoc');
+        }
+    }
 }
 
 test {

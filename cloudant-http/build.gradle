@@ -21,6 +21,11 @@ dependencies {
     }
 }
 
+javadoc {
+    include("**/http/*")
+    exclude("**/http/Version.java")
+}
+
 uploadArchives {
     repositories {
         mavenDeployer {
