@@ -78,7 +78,7 @@ public class HttpConnection {
             ua = version.getUserAgentString();
         } catch (Exception e) {
             logger.log(Level.WARNING, "Could not determine version string using default" +
-                    " user-agent",e);
+                    " user-agent", e);
         }
         USER_AGENT = ua;
     }
@@ -228,16 +228,16 @@ public class HttpConnection {
      * @throws IOException if there was a problem writing data to the server
      */
     public HttpConnection execute() throws IOException {
-            boolean retry = true;
-            int n = numberOfRetries;
-            while (retry && n-- > 0) {
-                connection = connectionFactory.openConnection(url);
+        boolean retry = true;
+        int n = numberOfRetries;
+        while (retry && n-- > 0) {
+            connection = connectionFactory.openConnection(url);
 
-                connection.setRequestProperty("User-Agent", USER_AGENT);
+            connection.setRequestProperty("User-Agent", USER_AGENT);
 
-                if (url.getUserInfo() != null) {
-                    requestInterceptors.add(new BasicAuthInterceptor(url.getUserInfo()));
-                }
+            if (url.getUserInfo() != null) {
+                requestInterceptors.add(new BasicAuthInterceptor(url.getUserInfo()));
+            }
 
             // always read the result, so we can retrieve the HTTP response code
             connection.setDoInput(true);
