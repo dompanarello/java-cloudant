@@ -223,6 +223,9 @@ public class HttpConnection {
      * Call {@code responseAsString}, {@code responseAsBytes}, or {@code responseAsInputStream}
      * after {@code execute} if the response body is required.
      * </p>
+     * <P>
+     * Note if the URL contains user information it will be encoded in a BasicAuth header.
+     * </P>
      *
      * @return An {@link HttpConnection} which can be used to obtain the response body
      * @throws IOException if there was a problem writing data to the server
@@ -236,7 +239,8 @@ public class HttpConnection {
             connection.setRequestProperty("User-Agent", USER_AGENT);
 
             if (url.getUserInfo() != null) {
-                requestInterceptors.add(new BasicAuthInterceptor(url.getUserInfo()));
+                // Insert at position 0 in case another interceptor wants to overwrite the BasicAuth
+                requestInterceptors.add(0, new BasicAuthInterceptor(url.getUserInfo()));
             }
 
             // always read the result, so we can retrieve the HTTP response code
