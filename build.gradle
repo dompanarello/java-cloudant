@@ -195,7 +195,9 @@ subprojects {
         //we don't want to run findbugs on the test code yet
         sourceSets = [sourceSets.main]
         //exclude a couple of known bugs until we get the chance to fix them
-        excludeFilter = file("findbugs_excludes.xml")
+        if (file("findbugs_excludes.xml").exists()) {
+            excludeFilter = file("findbugs_excludes.xml")
+        }
     }
 
     tasks.withType(FindBugs) {
