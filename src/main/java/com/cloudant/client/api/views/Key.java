@@ -20,6 +20,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
@@ -136,7 +137,22 @@ public class Key {
             }
             return this;
         }
+        
+        private <T> Key.ComplexKey addEmptyJsonObject() {
+            json.add(new JsonObject());
+            return this;
+        }
 
+        /**
+         * Add an empty object "{}" to the complex key.
+         *
+         * @return this ComplexKey to allow chained additions
+         * @since 2.3.1
+         */
+        public Key.ComplexKey addEmptyObject() {
+            return addEmptyJsonObject();
+        }
+        
         /**
          * Add one or more strings to the complex key.
          *
