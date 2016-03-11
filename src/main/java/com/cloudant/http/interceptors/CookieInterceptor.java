@@ -234,6 +234,12 @@ public class CookieInterceptor implements HttpConnectionRequestInterceptor,
     }
 
     private String extractCookieFromHeaderValue(String cookieHeaderValue){
-        return cookieHeaderValue.substring(0, cookieHeaderValue.indexOf(";"));
+    	String cookie = null;
+    	try {
+    		cookie = cookieHeaderValue.substring(0, cookieHeaderValue.indexOf(";"));
+    	} catch (StringIndexOutOfBoundsException e) {
+    		System.err.println("WARNING - StringIndexOutOfBounds - " + e.getMessage());
+    	}
+        return cookie;
     }
 }
