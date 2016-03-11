@@ -97,15 +97,19 @@ public class CookieInterceptor implements HttpConnectionRequestInterceptor,
     public HttpConnectionInterceptorContext interceptResponse(HttpConnectionInterceptorContext
                                                                       context) {
         HttpURLConnection connection = context.connection.getConnection();
-
+        boolean renewCookie = false;
+        
         String cookieHeader = connection.getHeaderField("Set-Cookie");
         if(cookieHeader != null){
             cookie = this.extractCookieFromHeaderValue(cookieHeader);
-            return context;
+            if (cookie != null) {
+            	return context;
+            } else {
+            	renewCookie = true;
+            }
         }
 
         try {
-            boolean renewCookie = false;
             int statusCode = connection.getResponseCode();
             switch (statusCode) {
                 case HttpURLConnection.HTTP_FORBIDDEN: //403
